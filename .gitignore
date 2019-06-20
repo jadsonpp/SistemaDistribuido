@@ -8,3 +8,13 @@ ebin/*.beam
 rel/example_project
 .concrete/DEV_MODE
 .rebar
+.directory
+.vscode
+.idea
+.env
+.sonarlint
+env
+venv/
+__pycache__
+*~
+*.pyc
