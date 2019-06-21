@@ -33,9 +33,8 @@ print(' [*] Waiting for messages. To exit press CTRL+C')
 def callback(ch, method, properties, body):
     cur = conn.cursor()
     msg = json.loads(body)
-    cur.execute("INSERT INTO sensores (umidade, temperatura, pressao, localizacao) "
-                "values ("+ "'"+msg['Umidade']+"','" +msg['Temperatura']+"','"+
-                msg['Pressao']+"','"+msg['Localizacao']+"');")
+    cur.execute("INSERT INTO sensores (temperatura, localizacao) "
+                "values ("+ "'"+msg['Temperatura']+"','" +msg['Localizacao']+"');")
 
     conn.commit()
     ch.basic_ack(delivery_tag=method.delivery_tag)
@@ -46,13 +45,3 @@ def callback(ch, method, properties, body):
 channel.basic_qos(prefetch_count=1)
 channel.basic_consume(queue='task_queue', on_message_callback=callback)
 channel.start_consuming()
-
-
-
-'''
-ClienteSerra.py
-
-insert into sensores(umidade, temperatura, pressao, localizacao) values ('0.4','33.4','34.4','vila velha');
-
-
-'''
