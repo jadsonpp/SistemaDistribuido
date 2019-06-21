@@ -2,6 +2,7 @@ import pika
 import time
 import psycopg2
 import json
+from flask import Flask, Markup, render_template
 
 #info bd -> Elephant SQL
 DB_NAME = "uivesmor"
