@@ -2,7 +2,7 @@ import pika
 import time
 import psycopg2
 import json
-from flask import Flask, Markup, render_template
+
 
 #info bd -> Elephant SQL
 DB_NAME = "uivesmor"
@@ -40,9 +40,10 @@ def callback(ch, method, properties, body):
     conn.commit()
     ch.basic_ack(delivery_tag=method.delivery_tag)
     time.sleep(body.count(b'.'))
-    #conn.close()
+
 
 
 channel.basic_qos(prefetch_count=1)
 channel.basic_consume(queue='task_queue', on_message_callback=callback)
 channel.start_consuming()
+
