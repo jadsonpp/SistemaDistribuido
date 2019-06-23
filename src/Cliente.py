@@ -37,7 +37,7 @@ def mandaMSG(msg:json):
 #Teste.
 
 while (True):
-    msg = criaDados("Fundao")
+    msg = criaDados("Vitoria")
     mandaMSG(msg)
     time.sleep(30)
 

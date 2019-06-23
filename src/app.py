@@ -45,7 +45,11 @@ def lineFundao():
 
     line_labels=lstDataHora
     line_values=lstValues
+<<<<<<< HEAD
     return render_template('relatorio.html', title='Temperatura Fundao', max=50, labels=line_labels, values=line_values)
+=======
+    return render_template('line_chart.html', title='Temperatura', max=50, labels=line_labels, values=line_values)
+>>>>>>> 58fd2ea4d90c399523b267d73c791a0e03ed34a6
 
 @app.route('/Serra')
 def lineSerra():
@@ -61,7 +65,11 @@ def lineSerra():
 
     line_labels=lstDataHora
     line_values=lstValues
+<<<<<<< HEAD
     return render_template('relatorio.html', title='Temperatura Serra', max=50, labels=line_labels, values=line_values)
+=======
+    return render_template('line_chart.html', title='Temperatura', max=50, labels=line_labels, values=line_values)
+>>>>>>> 58fd2ea4d90c399523b267d73c791a0e03ed34a6
 
 
 
@@ -79,7 +87,11 @@ def lineVitoria():
 
     line_labels=lstDataHora
     line_values=lstValues
+<<<<<<< HEAD
     return render_template('relatorio.html', title='Temperatura Vitória', max=50, labels=line_labels, values=line_values)
+=======
+    return render_template('line_chart.html', title='Temperatura', max=50, labels=line_labels, values=line_values)
+>>>>>>> 58fd2ea4d90c399523b267d73c791a0e03ed34a6
 
 
 if __name__ == '__main__':

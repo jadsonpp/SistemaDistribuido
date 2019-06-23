@@ -1,2 +1,2 @@
 # SistemaDistribuido
-A Simple DS
+A Simple DS using RabbitMQ, python, flask, elephantsql (postgreSQL)
