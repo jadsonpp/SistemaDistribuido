@@ -1,5 +1,4 @@
-import pika
-import sys
+import pika,os,sys
 import time
 import random
 import json
@@ -19,8 +18,9 @@ def criaDados(localizacao):
 
 #Faz o channel e manda a msg.
 def mandaMSG(msg:json):
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host='localhost'))
+    url = "amqp://jmqemkzi:1PYY-Y6M3SMIpcGSid3nGON2DVL782CR@prawn.rmq.cloudamqp.com/jmqemkzi"
+    params = pika.URLParameters(url)
+    connection = pika.BlockingConnection(params)
     channel = connection.channel()
     channel.queue_declare(queue='task_queue', durable=True)
     message = ' '.join(sys.argv[1:]) or (msg)
@@ -40,6 +40,5 @@ while (True):
     msg = criaDados("Fundao")
     mandaMSG(msg)
     time.sleep(30)
-
 
 

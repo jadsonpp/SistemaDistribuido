@@ -1,4 +1,4 @@
-import pika
+import pika,os
 import time
 import psycopg2
 import json
@@ -10,6 +10,8 @@ DB_HOST = "tuffi.db.elephantsql.com"
 DB_USER = "uivesmor"
 DB_PASSWORD = "pG0a8znwEl-tU2DvG5WP-tAyE7VH5Zkr"
 DB_PORT = "5432"
+
+
 
 #Conecta ao Banco.
 try:
@@ -23,8 +25,9 @@ except:
     print("database não encontrado.")
 
 #Conecatar a fila.
-connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost'))
+url = "amqp://jmqemkzi:1PYY-Y6M3SMIpcGSid3nGON2DVL782CR@prawn.rmq.cloudamqp.com/jmqemkzi"
+params = pika.URLParameters(url)
+connection = pika.BlockingConnection(params)
 channel = connection.channel()
 
 channel.queue_declare(queue='task_queue', durable=True)
