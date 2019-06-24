@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,request,redirect,url_for
 import psycopg2
 
 app = Flask(__name__)
@@ -45,7 +45,7 @@ def lineFundao():
 
     line_labels=lstDataHora
     line_values=lstValues
-    return render_template('relatorio.html', title='Temperatura Vitória', max=50, labels=line_labels, values=line_values)
+    return render_template('relatorio.html', title='Temperatura Fundão', max=50, labels=line_labels, values=line_values)
 
 
 @app.route('/Serra')
@@ -62,7 +62,7 @@ def lineSerra():
 
     line_labels=lstDataHora
     line_values=lstValues
-    return render_template('relatorio.html', title='Temperatura Vitória', max=50, labels=line_labels, values=line_values)
+    return render_template('relatorio.html', title='Temperatura Serra', max=50, labels=line_labels, values=line_values)
 
 
 
@@ -83,7 +83,35 @@ def lineVitoria():
     line_values=lstValues
     return render_template('relatorio.html', title='Temperatura Vitória', max=50, labels=line_labels, values=line_values)
 
+@app.route('/Data',methods= ['POST','GET'])
+def data():
+    if(request.method == 'POST'):
+        data = request.form['data']
+        print(data)
+        cur = conn.cursor()
+        lstDataHora = []  # LABEL
+        lstValues = []  # VALORES
+        '''cur.execute("SELECT dataHora,temperatura from sensores where data =>"+data+" AND data <"+data+"")
+        '''
+        for row in cur:
+            Hora = row[0].strftime('%H:%M:%S')
+            lstDataHora.append(Hora)
+            lstValues.append(row[1])
+        redirect(url_for('relatorio.html'))
+    else:
+        return render_template('relatorio.html')
+    
+    
+    line_labels = lstDataHora
+    line_values = lstValues
+    return render_template('relatorio.html', title='Temperatura No dia '+data, max=50, labels=line_labels,
+                               values=line_values)
+    
+    
+
+
 
 
 if __name__ == '__main__':
+    app.debug = True
     app.run(host='127.0.0.1', port=8080)

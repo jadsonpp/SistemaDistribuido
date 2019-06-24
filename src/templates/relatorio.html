@@ -7,15 +7,20 @@
 </head>
 
 <body>
-  <div id="divBusca" align="right" method="POST">
-    <input type="text" id="txtBusca"  />
-    <button id="btnBusca">ok</button>
+  <div align="right">
+    {% block content %}
+      <form action="/Data" method="post">
+        <label>Data</label>
+        <input name="data" id="data" required>
+        <input type="submit" value="data">
+      </form>
+    {% endblock %}
   </div>
 
   <center>
     <h1>{{ title }}</h1>
 
-    <canvas id="chart" width="600" height="400"></canvas>
+    <canvas id="chart" width="900" height="400"></canvas>
     <script>
       // bar chart data
       var barData = {
@@ -47,7 +52,7 @@
       Chart.defaults.global.animationEasing = "easeOutBounce";
       Chart.defaults.global.responsive = false;
       Chart.defaults.global.scaleLineColor = "black";
-      Chart.defaults.global.scaleFontSize = 16;
+      Chart.defaults.global.scaleFontSize = 14;
       // get bar chart canvas
       var mychart = document.getElementById("chart").getContext("2d");
       steps = 10
