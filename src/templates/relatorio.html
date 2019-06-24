@@ -3,20 +3,25 @@
 <head>
   <meta charset="utf-8" />
   <title>{{ title }}</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
+    <script>
+	  $( function() {
+		$( "#datepickerBegin" ).datepicker();
+	  } );
+  </script>
+  
+  <script>
+	  $( function() {
+		$( "#datepickerEnd" ).datepicker();
+	  } );
+  </script>
 </head>
 
 <body>
-  <div align="right">
-    {% block content %}
-      <form action="/Data" method="post">
-        <label>Data</label>
-        <input name="data" id="data" required>
-        <input type="submit" value="data">
-      </form>
-    {% endblock %}
-  </div>
-
   <center>
     <h1>{{ title }}</h1>
 
@@ -44,21 +49,25 @@
           }
 	]
       }
-      Chart.defaults.global.animationSteps = 50;
-      Chart.defaults.global.tooltipYPadding = 16;
-      Chart.defaults.global.tooltipCornerRadius = 0;
-      Chart.defaults.global.tooltipTitleFontStyle = "normal";
-      Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
-      Chart.defaults.global.animationEasing = "easeOutBounce";
-      Chart.defaults.global.responsive = false;
-      Chart.defaults.global.scaleLineColor = "black";
-      Chart.defaults.global.scaleFontSize = 14;
-      // get bar chart canvas
+      
+	  //Chart.defaults.global.animationSteps = 50;
+      //Chart.defaults.global.tooltipYPadding = 16;
+      //Chart.defaults.global.tooltipCornerRadius = 0;
+      //Chart.defaults.global.tooltipTitleFontStyle = "normal";
+      //Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
+      //Chart.defaults.global.animationEasing = "easeOutBounce";
+      //Chart.defaults.global.responsive = false;
+      //Chart.defaults.global.scaleLineColor = "black";
+      //Chart.defaults.global.scaleFontSize = 14;
+      
+	  // get bar chart canvas
       var mychart = document.getElementById("chart").getContext("2d");
       steps = 10
       max = {{ max }}
+	  
       // draw bar chart
-      var LineChartDemo = new Chart(mychart).Line(barData, {
+      var LineChartDemo = new Chart(mychart).Line(barData,
+	  {
         scaleOverride: true,
         scaleSteps: steps,
         scaleStepWidth: Math.ceil(max / steps),
@@ -69,12 +78,86 @@
         scaleShowLabels: true,
         bezierCurve: false,
       });
-    </script>
+	  
+	var barDataClone = copiarObjecto(barData);
+	  
+	function copiarObjecto(obj) {
+		if (obj === null || typeof obj !== 'object') {
+			return obj;
+		}
+		
+		var temp = obj.constructor();
+		
+		for (var key in obj) {
+			temp[key] = copiarObjecto(obj[key]);
+		}
+		
+		return temp;
+	}
+		
+	function filterData(){
+		var dataInicio = new Date(document.getElementById("datepickerBegin").value);
+		var dataFinal = new Date(document.getElementById("datepickerEnd").value);
+	
+		//Confere se a data inserida é válida
+		if(dataFinal < dataInicio){
+			alert("DATA FINAL MENOR QUE INICIAL");
+			return;
+		}
+		
+		//Se as datas forem vazias então reseta o filtro
+		if(isNaN(dataInicio) && isNaN(dataFinal)){
+			barDataClone = copiarObjecto(barData);
+		}
+		else
+		{
+			barDataClone = copiarObjecto(barData);
+			for(var i = 0; i < barData["datasets"][0]["data"].length; i++)
+			{
+				var date_label = barData["labels"][i].split(' ')[0].split('/');
+				
+				var new_date = new Date(date_label[2], date_label[1] - 1, date_label[0]);
+				
+				if(!isNaN(dataInicio) && new_date < dataInicio)
+				{
+					delete barDataClone["labels"][i];
+					delete barDataClone["datasets"][0]["data"][i];
+				}
+				
+				if(!isNaN(dataFinal) && new_date > dataFinal)
+				{
+					delete barDataClone["labels"][i];
+					delete barDataClone["datasets"][0]["data"][i];
+				}				
+			}
+		}
+
+		var LineChartDemo = new Chart(mychart).Line(barDataClone,
+		  {
+			scaleOverride: true,
+			scaleSteps: steps,
+			scaleStepWidth: Math.ceil(max / steps),
+			scaleStartValue: 0,
+			scaleShowVerticalLines: true,
+			scaleShowGridLines : true,
+			barShowStroke : true,
+			scaleShowLabels: true,
+			bezierCurve: false,
+		  });
+	}
+    
+	</script>
   </center>
   <div align="center">
+  
     <button onclick="window.location.href = '/Serra';">Serra</button>
     <button onclick="window.location.href = '/Vitoria';">Vitoria</button>
     <button onclick="window.location.href = '/';">Fundao</button>
+    
+	<p>De: <input type="text" id="datepickerBegin"></p>
+	<p>Até: <input type="text" id="datepickerEnd"></p>
+	
+	<button onclick="filterData()">Filtrar</button>
   </div>
 </body>
 </html>
